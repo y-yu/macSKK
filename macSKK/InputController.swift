@@ -373,7 +373,16 @@ class InputController: IMKInputController {
         } else if event.characters == " " {
             return .space
         } else if event.characters == ";" {
-            return .stickyShift
+            switch stateMachine.state.inputMethod {
+            case .composing(let state):
+                if state.okuri == .none {
+                    return .stickyShift
+                } else {
+                    return .printable(";")
+                }
+            default:
+                return .stickyShift
+            }
         } else if let text = charactersIgnoringModifiers {
             if isPrintable(text) {
                 return .printable(text)
