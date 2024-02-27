@@ -98,6 +98,30 @@ final class StateMachineTests: XCTestCase {
         XCTAssertTrue(stateMachine.handle(Action(keyEvent: .eisu, originalEvent: nil, cursorPosition: .zero)))
         XCTAssertTrue(stateMachine.handle(Action(keyEvent: .kana, originalEvent: nil, cursorPosition: .zero)))
     }
+    
+    func testHandleKanaOnEisuAndMode() {
+        let expectation = XCTestExpectation()
+        stateMachine.inputMethodEvent.collect(2).sink { events in
+            XCTAssertEqual(events[0], .modeChanged(.direct, .zero))
+            XCTAssertEqual(events[1], .modeChanged(.hiragana, .zero))
+            /*
+            XCTAssertEqual(events[2], .modeChanged(.hankaku, .zero))
+            XCTAssertEqual(events[3], .modeChanged(.hiragana, .zero))
+            XCTAssertEqual(events[4], .modeChanged(.katakana, .zero))
+            XCTAssertEqual(events[5], .modeChanged(.hiragana, .zero))
+            XCTAssertEqual(events[6], .modeChanged(.eisu, .zero))
+             */
+            expectation.fulfill()
+        }.store(in: &cancellables)
+        XCTAssertTrue(stateMachine.handle(printableKeyEventAction(character: "l")))
+        XCTAssertTrue(stateMachine.handle(Action(keyEvent: .kana, originalEvent: nil, cursorPosition: .zero)))
+        /*XCTAssertTrue(stateMachine.handle(Action(keyEvent: .ctrlQ, originalEvent: nil, cursorPosition: .zero)))
+        XCTAssertTrue(stateMachine.handle(Action(keyEvent: .kana, originalEvent: nil, cursorPosition: .zero)))
+        XCTAssertTrue(stateMachine.handle(printableKeyEventAction(character: "q")))
+        XCTAssertTrue(stateMachine.handle(Action(keyEvent: .kana, originalEvent: nil, cursorPosition: .zero)))
+        XCTAssertTrue(stateMachine.handle(printableKeyEventAction(character: "l", withShift: true)))*/
+        wait(for: [expectation], timeout: 1.0)
+    }
 
     func testHandleNormalSpecialSymbol() throws {
         let expectation = XCTestExpectation()
