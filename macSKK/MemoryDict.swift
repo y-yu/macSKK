@@ -16,9 +16,9 @@ struct MemoryDict: DictProtocol {
      */
     private(set) var entries: [String: [Word]]
     /**
-     * 読み込みに失敗した行数。コメント行、空行は除いた行数。
+     * 読み込みに失敗した行番号
      */
-    private(set) var failedEntryCount: Int
+    private(set) var failedEntryLineNumbers: [Int]
     /**
      * 送りなしの読みの配列。最近変換したものが後に登場する。
      *
@@ -35,7 +35,7 @@ struct MemoryDict: DictProtocol {
         var okuriNashiYomis: [String] = []
         var okuriAriYomis: [String] = []
         var lineNumber = 0
-        var failedEntryCount = 0
+        var failedEntryLineNumbers: [Int] = []
 
         source.enumerateLines { line, stop in
             lineNumber += 1
@@ -54,12 +54,12 @@ struct MemoryDict: DictProtocol {
                     okuriNashiYomis.append(entry.yomi)
                 }
             } else {
-                failedEntryCount += 1
+                failedEntryLineNumbers += [lineNumber]
                 logger.warning("辞書 \(dictId, privacy: .public) の読み込みで \(lineNumber)行目を正常に読み込めなかったためこの行をスキップします")
             }
         }
         entries = dict
-        self.failedEntryCount = failedEntryCount
+        self.failedEntryLineNumbers = failedEntryLineNumbers
         self.okuriNashiYomis = okuriNashiYomis.reversed()
         self.okuriAriYomis = okuriAriYomis.reversed()
     }
@@ -67,7 +67,7 @@ struct MemoryDict: DictProtocol {
     init(entries: [String: [Word]], readonly: Bool) {
         self.readonly = readonly
         self.entries = entries
-        failedEntryCount = 0
+        failedEntryLineNumbers = []
         if !readonly {
             for yomi in entries.keys {
                 if yomi.isOkuriAri {

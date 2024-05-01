@@ -329,8 +329,8 @@ final class SettingsViewModel: ObservableObject {
                     self.userDictLoadingStatus = loadEvent.status
                     if case .fail(let error) = loadEvent.status {
                         UNNotifier.sendNotificationForUserDict(readError: error)
-                    } else if case .loaded(_, let failureCount) = loadEvent.status, failureCount > 0 {
-                        UNNotifier.sendNotificationForUserDict(failureEntryCount: failureCount)
+                    } else if case .loaded(_, let failureLineNumbers) = loadEvent.status, failureLineNumbers.count > 0 {
+                        UNNotifier.sendNotificationForUserDict(failureEntryCount: failureLineNumbers.count)
                     }
                 } else {
                     self.dictLoadingStatuses[loadEvent.id] = loadEvent.status

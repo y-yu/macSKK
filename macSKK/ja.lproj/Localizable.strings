@@ -21,6 +21,7 @@
 "SettingsHeaderWorkaroundApplication" = "アプリケーションの互換性の設定";
 "LoadingStatusLoaded %lld" = "%lld エントリ";
 "LoadingStatusLoaded %lld WithError %lld" = "%lld エントリ (%lld行の読み込みエラー)";
+"ErrorLineNumber" = "エラー行番号";
 "LoadingStatusLoading" = "読み込み中…";
 "LoadingStatusError %@" = "エラー: %@";
 "LoadingStatusDisabled" = "無効";

@@ -71,7 +71,7 @@ class FileDict: NSObject, DictProtocol, Identifiable {
                     logger.log("辞書 \(self.id, privacy: .public) から \(self.dict.entries.count) エントリ読み込みました")
                     NotificationCenter.default.post(name: notificationNameDictLoad,
                                                     object: DictLoadEvent(id: self.id,
-                                                                          status: .loaded(success: dict.entryCount, failure: dict.failedEntryCount)))
+                                                                          status: .loaded(success: dict.entryCount, failureLineNumbers: dict.failedEntryLineNumbers)))
                 } catch {
                     logger.error("辞書 \(self.id, privacy: .public) の読み込みでエラーが発生しました: \(error)")
                     NotificationCenter.default.post(name: notificationNameDictLoad,
@@ -180,7 +180,7 @@ class FileDict: NSObject, DictProtocol, Identifiable {
     /**
      * 読み込みに失敗した行数。コメント行、空行は除いた行数。
      */
-    var failedEntryCount: Int { return dict.failedEntryCount }
+    var failedEntryCount: Int { return dict.failedEntryLineNumbers.count }
 
     // MARK: DictProtocol
     func refer(_ yomi: String, option: DictReferringOption?) -> [Word] {
@@ -191,7 +191,7 @@ class FileDict: NSObject, DictProtocol, Identifiable {
         dict.add(yomi: yomi, word: word)
         NotificationCenter.default.post(name: notificationNameDictLoad,
                                         object: DictLoadEvent(id: self.id,
-                                                              status: .loaded(success: dict.entryCount, failure: dict.failedEntryCount)))
+                                                              status: .loaded(success: dict.entryCount, failureLineNumbers: dict.failedEntryLineNumbers)))
         hasUnsavedChanges = true
     }
 
@@ -200,7 +200,7 @@ class FileDict: NSObject, DictProtocol, Identifiable {
             hasUnsavedChanges = true
             NotificationCenter.default.post(name: notificationNameDictLoad,
                                             object: DictLoadEvent(id: self.id,
-                                                                  status: .loaded(success: dict.entryCount, failure: dict.failedEntryCount)))
+                                                                  status: .loaded(success: dict.entryCount, failureLineNumbers: dict.failedEntryLineNumbers)))
             return true
         }
         return false

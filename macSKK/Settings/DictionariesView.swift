@@ -15,8 +15,7 @@ struct DictionariesView: View {
                     VStack(alignment: .leading, spacing: 2) {
                         Text(UserDict.userDictFilename)
                             .font(.body)
-                        Text(loadingStatus(of: settingsViewModel.userDictLoadingStatus))
-                            .font(.footnote)
+                        loadingStatus(of: settingsViewModel.userDictLoadingStatus)
                     }
                 } header: {
                     Text("SettingsNameUserDictTitle")
@@ -47,8 +46,7 @@ struct DictionariesView: View {
                                     VStack(alignment: .leading, spacing: 2) {
                                         Text(dictSetting.id)
                                             .font(.body)
-                                        Text(loadingStatus(setting: dictSetting.wrappedValue))
-                                            .font(.footnote)
+                                        loadingStatus(setting: dictSetting.wrappedValue)
                                     }
                                 }
                                 .toggleStyle(.switch)
@@ -97,32 +95,46 @@ struct DictionariesView: View {
             Spacer()
         }
     }
+    
+    private func footnoteText(_ string: String) -> some View {
+        Text(string).font(.footnote)
+    }
 
-    private func loadingStatus(setting: DictSetting) -> String {
+    private func loadingStatus(setting: DictSetting) -> AnyView {
         if let status = settingsViewModel.dictLoadingStatuses[setting.id] {
-            return loadingStatus(of: status)
+            return AnyView(loadingStatus(of: status))
         } else if !setting.enabled {
             // 元々無効になっていて、設定を今回の起動で切り替えてない辞書
-            return String(localized: "LoadingStatusDisabled")
+            return AnyView(footnoteText(String(localized: "LoadingStatusDisabled")))
         } else {
-            return String(localized: "LoadingStatusUnknown")
+            return AnyView(footnoteText(String(localized: "LoadingStatusUnknown")))
         }
     }
 
-    private func loadingStatus(of status: DictLoadStatus) -> String {
+    private func loadingStatus(of status: DictLoadStatus) -> AnyView {
         switch status {
-        case .loaded(success: let entryCount, failure: let failureCount):
+        case .loaded(let entryCount, let failureLineNumbers):
+            let failureCount = failureLineNumbers.count
             if failureCount == 0 {
-                return String(localized: "LoadingStatusLoaded \(entryCount)")
+                return AnyView(footnoteText(String(localized: "LoadingStatusLoaded \(entryCount)")))
             } else {
-                return String(localized: "LoadingStatusLoaded \(entryCount) WithError \(failureCount)")
+                return AnyView(
+                    VStack(alignment: .leading) {
+                        footnoteText(String(localized: "LoadingStatusLoaded \(entryCount) WithError \(failureCount)"))
+                        List {
+                            DisclosureGroup("ErrorLineNumber") {
+                                Text(failureLineNumbers.map{ String($0) }.joined(separator: ", "))
+                            }
+                        }
+                    }
+                )
             }
         case .loading:
-            return String(localized: "LoadingStatusLoading")
+            return AnyView(footnoteText(String(localized: "LoadingStatusLoading")))
         case .disabled:
-            return String(localized: "LoadingStatusDisabled")
+            return AnyView(footnoteText(String(localized: "LoadingStatusDisabled")))
         case .fail(let error):
-            return String(localized: "LoadingStatusError \(error as NSError)")
+            return AnyView(footnoteText(String(localized: "LoadingStatusError \(error as NSError)")))
         }
     }
 }
@@ -134,6 +146,7 @@ struct DictionariesView_Previews: PreviewProvider {
 
     static var previews: some View {
         let dictSettings = [
+            DictSetting(filename: "SKK-JISYO.success_only", enabled: true, encoding: .japaneseEUC),
             DictSetting(filename: "SKK-JISYO.L", enabled: true, encoding: .japaneseEUC),
             DictSetting(filename: "SKK-JISYO.sample.utf-8", enabled: false, encoding: .utf8),
             DictSetting(filename: "SKK-JISYO.dummy", enabled: true, encoding: .utf8),
@@ -141,7 +154,8 @@ struct DictionariesView_Previews: PreviewProvider {
         ]
         let settings = try! SettingsViewModel(dictSettings: dictSettings)
         settings.dictLoadingStatuses = [
-            "SKK-JISYO.L": .loaded(success: 123456, failure: 789),
+            "SKK-JISYO.success_only": .loaded(success: 123456, failureLineNumbers: []),
+            "SKK-JISYO.L": .loaded(success: 123456, failureLineNumbers: Array(0..<10)),
             "SKK-JISYO.sample.utf-8": .disabled,
             "SKK-JISYO.dummy": .loading,
             "SKK-JISYO.error": .fail(DictionariesViewPreviewError.dummy)
