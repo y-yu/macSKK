@@ -94,6 +94,13 @@ struct KeyBinding: Identifiable {
         }
     }
 
+    /// 使用する可能性がある修飾キー
+    private static let targetModifierFlagsArray: [NSEvent.ModifierFlags] = [.shift, .control, .function, .option, .command]
+    private static let targetModifierFlags: NSEvent.ModifierFlags = 
+        targetModifierFlagsArray.reduce([]) { partialResult, flag in
+            partialResult.union(flag)
+        }
+    
     struct Input: Hashable, Equatable {
         let key: Key
         /// 入力時に押されている修飾キー。
@@ -111,7 +118,7 @@ struct KeyBinding: Identifiable {
                 key = .code(event.keyCode)
             }
             // 使用する可能性があるものだけを抽出する。じゃないとrawValueで256が入ってしまうっぽい?
-            modifierFlags = event.modifierFlags.intersection([.shift, .control, .function, .option, .command])
+            modifierFlags = event.modifierFlags.intersection(targetModifierFlags)
             displayString = (event.charactersIgnoringModifiers ?? event.characters) ?? ""
         }
 
@@ -210,6 +217,13 @@ struct KeyBinding: Identifiable {
     var localizedInputs: String {
         inputs.map { $0.localized }.joined(separator: ", ")
     }
+    
+    static private let anyModifierFlags: [NSEvent.ModifierFlags] =
+        ([.option].powerset).map({ s in
+            s.reduce([]) { partialResult, e in
+                partialResult.union(e)
+            }
+        })
 
     /// デフォルトのキーバインディング
     static var defaultKeyBindingSettings: [KeyBinding] {
@@ -232,7 +246,12 @@ struct KeyBinding: Identifiable {
             case .stickyShift:
                 return KeyBinding(action, [Input(key: .character(";"), displayString: ";", modifierFlags: [])])
             case .enter:
-                return KeyBinding(action, [Input(key: .code(0x24), displayString: "Enter", modifierFlags: [])])
+                return KeyBinding(
+                    action,
+                    anyModifierFlags.map({ modifierFlags in
+                        Input(key: .code(0x24), displayString: "Enter", modifierFlags: modifierFlags)
+                    })
+                )
             case .space:
                 return KeyBinding(action, [Input(key: .code(0x31), displayString: "Space", modifierFlags: [])])
             case .tab:
@@ -272,5 +291,21 @@ struct KeyBinding: Identifiable {
                 return KeyBinding(action, [Input(key: .code(0x68), displayString: String(localized: "KeyKana"), modifierFlags: [])])
             }
         }
+    }
+}
+
+/// https://stackoverflow.com/questions/39160552/find-all-combination-of-string-array-in-swift
+extension Array {
+    var powerset: [[Element]] {
+        guard count > 0 else {
+            return [[]]
+        }
+
+        let tail = Array(self[1..<endIndex])
+        let head = self[0]
+        let withoutHead = tail.powerset
+        let withHead = withoutHead.map { $0 + [head] }
+
+        return withHead + withoutHead
     }
 }
