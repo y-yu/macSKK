@@ -3,9 +3,20 @@
 
 import Foundation
 
-enum EucJis2004Error: Error {
+enum EucJis2004Error: Error, CustomStringConvertible {
     case unsupported
-    case convert
+    case convert(Int?)
+    
+    var description: String {
+        switch self {
+        case .unsupported:
+            return "EucJis2004Error.unsupported"
+        case .convert(let .some(code)):
+            return "EucJis2004Error.convert(iconv exit code: \(code))"
+        case .convert(.none):
+            return "EucJis2004Error.convert"
+        }
+    }
 }
 
 extension Data {
@@ -46,13 +57,13 @@ extension Data {
                     } else if errno == EINVAL {
                         logger.error("入力文字列が終端していません")
                     }
-                    throw EucJis2004Error.convert
+                    throw EucJis2004Error.convert(ret)
                 } else if ret > 0 {
                     logger.warning("EUC-JIS-2004から処理できない文字が \(ret) 文字ありました")
                 }
             }
             guard let str = String(validatingUTF8: buffer) else {
-                throw EucJis2004Error.convert
+                throw EucJis2004Error.convert(.none)
             }
             return str
         }
