@@ -9,9 +9,9 @@ final class RandomAccessCollectionSearchTests: XCTestCase {
     func testToBinarySearchByTarget() throws {
         let oneHundred = (0 ..< 100)
         for e in oneHundred {
-            XCTAssertEqual(oneHundred.binarySearch(target: e), e)
+            XCTAssertEqual(oneHundred.binarySearch(target: e), .found(e, e))
         }
-        XCTAssertEqual(oneHundred.binarySearch(target: 9999), nil)
+        XCTAssertEqual(oneHundred.binarySearch(target: 9999), .shouldInsertAt(100))
     }
     
     func testToBinarySearchByCondition() throws {
@@ -27,7 +27,7 @@ final class RandomAccessCollectionSearchTests: XCTestCase {
                 -1
             }
         }
-        XCTAssertEqual(actual, target)
+        XCTAssertEqual(actual, .found(128, 128))
         XCTAssertEqual(count, 3)
     }
 }

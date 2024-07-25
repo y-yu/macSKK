@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4BDE85152C5117C100D71CD7 /* RandomAccessCollection+Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BDE85142C5117C100D71CD7 /* RandomAccessCollection+Search.swift */; };
+		4BDE85172C5117DC00D71CD7 /* RandomAccessCollection+SearchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BDE85162C5117DC00D71CD7 /* RandomAccessCollection+SearchTests.swift */; };
 		CE06CA2B2AAC171B00E80E5E /* FileDictTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE06CA292AAC171B00E80E5E /* FileDictTests.swift */; };
 		CE06CA2D2AAC172F00E80E5E /* empty.txt in Resources */ = {isa = PBXBuildFile; fileRef = CE06CA2C2AAC172F00E80E5E /* empty.txt */; };
 		CE06CA342AAC199500E80E5E /* UserDict+Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE06CA332AAC199500E80E5E /* UserDict+Utilities.swift */; };
@@ -160,6 +162,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4BDE85142C5117C100D71CD7 /* RandomAccessCollection+Search.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RandomAccessCollection+Search.swift"; sourceTree = "<group>"; };
+		4BDE85162C5117DC00D71CD7 /* RandomAccessCollection+SearchTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RandomAccessCollection+SearchTests.swift"; sourceTree = "<group>"; };
 		CE06CA292AAC171B00E80E5E /* FileDictTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileDictTests.swift; sourceTree = "<group>"; };
 		CE06CA2C2AAC172F00E80E5E /* empty.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = empty.txt; sourceTree = "<group>"; };
 		CE06CA332AAC199500E80E5E /* UserDict+Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UserDict+Utilities.swift"; sourceTree = "<group>"; };
@@ -382,6 +386,7 @@
 				CE84A3DF295717CB009394C4 /* StateMachine.swift */,
 				CEE2D9762A99FE1B00A4CD76 /* Word.swift */,
 				CE313A1E2AF5213700A49142 /* Candidate.swift */,
+				4BDE85142C5117C100D71CD7 /* RandomAccessCollection+Search.swift */,
 				CE84A3EA295DA715009394C4 /* Dict.swift */,
 				CE5EB6AC2AAC0DE000389B98 /* FileDict.swift */,
 				CE5EB6AE2AAC0DEB00389B98 /* MemoryDict.swift */,
@@ -444,6 +449,7 @@
 				CE06CA292AAC171B00E80E5E /* FileDictTests.swift */,
 				CEA78FB129646CA100B67E25 /* UserDictTests.swift */,
 				CED1CA1D2BAFBE0600C32AE3 /* SKKServDictTests.swift */,
+				4BDE85162C5117DC00D71CD7 /* RandomAccessCollection+SearchTests.swift */,
 				CEADA44C2B025A8A0026E2BD /* EntryTests.swift */,
 				CE84A3E8295DA504009394C4 /* RomajiTests.swift */,
 				CE2F3B122C030C9A00CE342B /* KeyBindingTests.swift */,
@@ -792,6 +798,7 @@
 				CE40D9A32A6D0C3900D44799 /* SystemDict.swift in Sources */,
 				CE49A27C2C26F61700D53CFE /* KeyBindingInputsView.swift in Sources */,
 				CE5EB6AD2AAC0DE000389B98 /* FileDict.swift in Sources */,
+				4BDE85152C5117C100D71CD7 /* RandomAccessCollection+Search.swift in Sources */,
 				CEB0888E2A7F393600EFD1E3 /* AnnotationView.swift in Sources */,
 				CEC376E82965199500D9C432 /* SettingsView.swift in Sources */,
 				CEC376EB2965211200D9C432 /* KeyEventView.swift in Sources */,
@@ -807,6 +814,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CE84A3ED295DA818009394C4 /* MemoryDictTests.swift in Sources */,
+				4BDE85172C5117DC00D71CD7 /* RandomAccessCollection+SearchTests.swift in Sources */,
 				CE06CA342AAC199500E80E5E /* UserDict+Utilities.swift in Sources */,
 				CE84A3E9295DA504009394C4 /* RomajiTests.swift in Sources */,
 				CE4CB5CE2AD55DF90046FA34 /* NumberEntryTests.swift in Sources */,
@@ -1013,7 +1021,7 @@
 				CURRENT_PROJECT_VERSION = 43;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"macSKK/Preview Content\"";
-				DEVELOPMENT_TEAM = W3A6B7FDC7;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = NO;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -1049,7 +1057,7 @@
 				CURRENT_PROJECT_VERSION = 43;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"macSKK/Preview Content\"";
-				DEVELOPMENT_TEAM = W3A6B7FDC7;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -1154,7 +1162,7 @@
 				CODE_SIGN_ENTITLEMENTS = SKKServClient/SKKServClient.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = W3A6B7FDC7;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SKKServClient/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = SKKServClient;
